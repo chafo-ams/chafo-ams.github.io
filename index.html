@@ -1,40 +1,217 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chafo Bakery</title>
     <style>
-        body { font-family: sans-serif; max-width: 800px; margin: auto; padding: 20px; background: #fffaf2; color: #333; }
-        h1 { color: #d2691e; }
-        img { max-width: 100%; border-radius: 8px; margin-bottom: 20px; }
-        .menu-item { font-size: 1.2em; margin: 10px 0; }
-        .contact, .delivery { margin-top: 30px; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #fffaf2;
+            color: #333;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #f8f0e3;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #d2691e;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+        }
+        .language-toggle button {
+            padding: 6px 12px;
+            background-color: #d2691e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .hero {
+            background: url('saltroll.jpg') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            padding: 120px 20px;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+        }
+        .intro {
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .product-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .card {
+            width: 280px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        .card img:hover {
+            transform: scale(1.02);
+        }
+        .card-body {
+            padding: 15px;
+            text-align: center;
+            font-size: 1em;
+        }
+        footer {
+            background-color: #f3ede6;
+            text-align: center;
+            padding: 30px 20px;
+            font-size: 0.95em;
+        }
+        .hidden { display: none; }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .modal-content {
+            margin: 5% auto;
+            display: block;
+            max-width: 90%;
+            max-height: 80vh;
+        }
+        .modal-content img {
+            width: 100%;
+            height: auto;
+        }
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
-<body>
-<h1>🍞 Chafo Amsterdam</h1>
-<p>欢迎来到Chafo bakery！我们每天清晨现烤，用心制作每一个面包。</p>
+<body onload="switchLanguage('en')">
+<header>
+    <div class="logo">Chafo Bakery</div>
+    <nav>
+        <a href="#">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#contact">Contact</a>
+    </nav>
+    <div class="language-toggle">
+        <button onclick="switchLanguage('zh')">中文</button>
+        <button onclick="switchLanguage('en')">EN</button>
+    </div>
+</header>
 
-<h2>菜单（Menu）</h2>
-<div class="menu-item">🍡 红豆面包 - €3.5 / 个</div>
-<div class="menu-item">🧂 海盐卷 - €3 / 个</div>
-<div class="menu-item">🍚 米面包 - €1.5 / 个</div>
-<div class="menu-item">部分产品未展示，持续更新中...</div>
+<section class="hero">
+    <h1 class="zh hidden">每天清晨现烤，用心制作每一个面包</h1>
+    <h1 class="en">Baked fresh every morning, crafted with heart</h1>
+</section>
 
-<h2>实物展示</h2>
-<img src="redbean.jpg" alt="红豆面包" />
-<img src="saltroll.jpg" alt="海盐卷" />
-<img src="ricebun.jpg" alt="米面包" />
+<section class="intro">
+    <div class="zh hidden">
+        欢迎来到Chafo Bakery！我们专注于制作温暖、治愈、充满手作温度的亚洲面包。部分产品未展示，持续更新中...
+    </div>
+    <div class="en">
+        Welcome to Chafo Bakery! We specialize in warm, comforting, handmade Asian breads. Some items not shown yet — updates coming soon...
+    </div>
+</section>
 
-<div class="delivery">
-    <h2>📦 配送方式</h2>
-    <p>目前仅支持阿姆自提。</p>
+<section class="product-grid" id="menu">
+    <!-- Red Bean Bun -->
+    <div class="card">
+        <img src="redbean.jpg" alt="Red Bean Bun" onclick="openModal(this.src)">
+        <div class="card-body">
+            <div class="zh hidden">红豆面包 - 3.5欧 / 个</div>
+            <div class="en">Red Bean Bun - €3.5 each</div>
+        </div>
+    </div>
+
+    <!-- Sea Salt Roll -->
+    <div class="card">
+        <img src="saltroll.jpg" alt="Sea Salt Roll" onclick="openModal(this.src)">
+        <div class="card-body">
+            <div class="zh hidden">海盐卷 - 3欧 / 个</div>
+            <div class="en">Sea Salt Roll - €3 each</div>
+        </div>
+    </div>
+
+    <!-- Rice Bun -->
+    <div class="card">
+        <img src="ricebun.jpg" alt="Rice Bun" onclick="openModal(this.src)">
+        <div class="card-body">
+            <div class="zh hidden">米面包 - 2欧 / 个</div>
+            <div class="en">Rice Bun - €2 each</div>
+        </div>
+    </div>
+</section>
+
+<footer id="contact">
+    <div class="zh hidden">
+        支持自提，阿姆市内圈订单满20欧起配送<br>
+        微信号：sglyyyzj<br>
+        Instagram: <a href="https://instagram.com/chafo_ams" target="_blank">@chafo_ams</a>
+    </div>
+    <div class="en">
+        Pickup available. Free delivery within Amsterdam city ring for orders over €20<br>
+        Instagram: <a href="https://instagram.com/chafo_ams" target="_blank">@chafo_ams</a>
+    </div>
+</footer>
+
+<div class="modal" id="imageModal" onclick="closeModal()">
+    <span class="modal-close" onclick="closeModal()">&times;</span>
+    <div class="modal-content">
+        <img id="modalImage" src="" alt="Zoomed Image">
+    </div>
 </div>
 
-<div class="contact">
-    <h2>📬 联系方式</h2>
-    <p>微信号：sglyyyzj</p>
-</div>
+<script>
+    function switchLanguage(lang) {
+        document.querySelectorAll('.zh').forEach(el => el.classList.toggle('hidden', lang !== 'zh'));
+        document.querySelectorAll('.en').forEach(el => el.classList.toggle('hidden', lang !== 'en'));
+    }
+
+    function openModal(src) {
+        document.getElementById('modalImage').src = src;
+        document.getElementById('imageModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('imageModal').style.display = 'none';
+    }
+</script>
 </body>
 </html>
